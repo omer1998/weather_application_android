@@ -114,9 +114,7 @@ fun MainWeatherScreen(
         }
 
         is WeatherUiState.Intitial -> {
-//            Box(Modifier.padding(30.dp)) {
-//                Text("Intital")
-//            }
+
         }
 
         is WeatherUiState.Loading -> {
@@ -125,7 +123,6 @@ fun MainWeatherScreen(
         }
 
         is WeatherUiState.Success -> {
-            Log.i("location", "state now is ${currentStateValue.location}")
             val currentWeather = currentStateValue.weatherData
             LazyColumn(
                 state = scrollState,
@@ -134,12 +131,11 @@ fun MainWeatherScreen(
                     .fillMaxSize()
                     .background(
                         brush = Brush.linearGradient(
-                            colors = listOf(
+                            colors = if(currentWeather.isDay) listOf(
                                 Color(0xFF87CEFA), Color(0xFFFFFFFF)
-                            )
+                            ) else listOf(Color(0xFF060414), Color(0xFF0D0C19))
                         ),
                     )
-                // .padding(vertical = 32.dp, horizontal = 12.dp)
 
             ) {
 
@@ -170,8 +166,6 @@ fun MainWeatherScreen(
                     Crossfade(showHeaderSideBySide) {
                         when (it) {
                             true -> {
-
-                                Log.i("#state", "changing scroll state")
                                 Row(
                                     Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -180,7 +174,7 @@ fun MainWeatherScreen(
                                     SmallWeatherImageView(weatherCode = currentWeather.weatherCode) // getImageFromWeatherCode
                                     TemperatureView(
                                         currentTemp = currentWeather.currentTemperature,
-                                        weatherStatus = "Clear", // getWeatherStatusFromCode()
+                                        weatherStatus = getWeatherStatusFromCode(currentWeather.weatherCode), // getWeatherStatusFromCode()
                                         maxTemp = currentWeather.highTemperature,
                                         minTemp = currentWeather.lowTemperature
                                     )
@@ -275,7 +269,7 @@ fun MainWeatherScreen(
                             items = currentWeather.todayHourlyTemperature,
                             key = { it.time }) { it ->
                             TemperatureInfoCard(
-                                image = painterResource(getWeatherImageFromWeatherCode(it.weatherCode)),
+                                image = painterResource(getWeatherImageFromWeatherCode(it.weatherCode, currentWeather.isDay)),
                                 temperature = it.temperature,
                                 time = it.getTime(),
                             )
@@ -301,7 +295,7 @@ fun MainWeatherScreen(
                             currentWeather.nextSeverDaysDetails.forEach {
                                 DayTemperatureInfo(
                                     day = it.dayName(),
-                                    image = painterResource(getWeatherImageFromWeatherCode(it.weatherCode)),
+                                    image = painterResource(getWeatherImageFromWeatherCode(it.weatherCode, currentWeather.isDay)),
                                     highTemp = it.maxTemp,
                                     lowTemp = it.minTemp,
 
