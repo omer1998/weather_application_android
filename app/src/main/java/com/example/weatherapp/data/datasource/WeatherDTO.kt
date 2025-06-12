@@ -14,7 +14,6 @@ import java.util.Locale
 data class WeatherDTO(val current: Current, val daily: Daily, val hourly: Hourly)
 
 fun WeatherDTO.toWeather(): Weather {
-    val dictTemp = mutableMapOf<String, Pair<Float, Int>>()
 
     val next7DaysDetails = mutableListOf<DayTemperatureStatus>()
     daily.date.forEachIndexed { index, date ->
@@ -40,7 +39,8 @@ fun WeatherDTO.toWeather(): Weather {
                 date = localDateTime, //"2025-06-12T00:00"
                 temperature = hourly.temperature[index],
                 weatherCode = hourly.weatherCode[index],
-                isDay = hourly.isDay[index] == 1
+                isDay = hourly.isDay[index] == 1,
+                uvIndex = hourly.uvIndex[index]
             )
         )
     }
@@ -52,7 +52,7 @@ fun WeatherDTO.toWeather(): Weather {
         humidity = current.humidity,
         rain = current.rain,
         pressure = current.pressure,
-        uvIndex = daily.maxUvIndex[0],
+        uvIndex = hourly.uvIndex[0],
         windSpeed = current.windSpeed,
         weatherCode = current.weatherCode,
         nextSeverDaysDetails = next7DaysDetails,
@@ -66,7 +66,8 @@ data class Hourly(
     val time: List<String>,
     @SerialName("temperature_2m") val temperature: List<Float>,
     @SerialName("weather_code") val weatherCode: List<Int>,
-    @SerialName("is_day") val isDay: List<Int>
+    @SerialName("is_day") val isDay: List<Int>,
+    @SerialName("uv_index") val uvIndex: List<Float>
 )
 
 @Serializable

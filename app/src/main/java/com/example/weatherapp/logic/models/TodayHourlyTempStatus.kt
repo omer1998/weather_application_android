@@ -7,7 +7,8 @@ class TodayHourlyTemperatureStatus(
     val date: LocalDateTime,
     val temperature :Float,
     val weatherCode: Int,
-    val isDay: Boolean
+    val isDay: Boolean,
+    val uvIndex: Float
 )
 
 fun TodayHourlyTemperatureStatus.getTime():String{
