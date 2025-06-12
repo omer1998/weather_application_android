@@ -43,9 +43,9 @@ fun DayTemperatureInfo(
             //.padding(horizontal = 16.dp)
             .height(61.dp)
             .fillMaxWidth()
-            .background(if (isDay) Color(0x14060414) else Color(0x14FFFFFF))
+            .background(if (isDay)  Color(0x14FFFFFF) else Color(0x14060414))
             .padding(bottom = 1.dp)
-            .background(Color.White),
+            .background(if(isDay)Color.White else Color(0xFF060414)),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
