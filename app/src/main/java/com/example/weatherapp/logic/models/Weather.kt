@@ -10,7 +10,7 @@ data class Weather(
     val uvIndex: Float,
     val windSpeed: Float,
     val weatherCode: Int,
+    val isDay: Boolean,
     val todayHourlyTemperature: List<TodayHourlyTemperatureStatus>,
     val nextSeverDaysDetails : List<DayTemperatureStatus>
-
     )

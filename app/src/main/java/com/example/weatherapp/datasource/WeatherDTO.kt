@@ -44,7 +44,8 @@ fun WeatherDTO.toWeather(): Weather{
         windSpeed = current.windSpeed,
         weatherCode = current.weatherCode,
         nextSeverDaysDetails = next7DaysDetails,
-        todayHourlyTemperature = hourlyTemperatures
+        todayHourlyTemperature = hourlyTemperatures,
+        isDay = current.isDay==1
     )
 }
 @Serializable
