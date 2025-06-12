@@ -33,13 +33,13 @@ import com.example.weatherapp.R
 
 @Composable
 fun TemperatureInfoCard(
-    image: Painter, temperature: Float, time: String, modifier: Modifier = Modifier
+    image: Painter, temperature: Float, time: String, isDay: Boolean, modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
             .widthIn(min = 90.dp)
             .padding(top = 20.dp)
-            .background(color = Color(0xB2FFFFFF), shape = RoundedCornerShape(20.dp)),
+            .background(color =if (isDay) Color(0xB2FFFFFF) else Color(0xB2060414), shape = RoundedCornerShape(20.dp)),
         contentAlignment = Alignment.Center
         //  Color(0xB2FFFFFF)
     ) {
@@ -70,7 +70,7 @@ fun TemperatureInfoCard(
                     fontSize = 16.sp,
                     lineHeight = 16.sp,
                     letterSpacing = 0.25.sp,
-                    color = Color(0xDE060414)
+                    color = if(isDay) Color(0xDE060414) else Color(0xDEFFFFFF)
                 )
                 Spacer(Modifier.height(2.dp))
                 Text(
@@ -79,7 +79,7 @@ fun TemperatureInfoCard(
                     fontSize = 16.sp,
                     lineHeight = 20.sp,
                     letterSpacing = 0.25.sp,
-                    color = Color(0x99060414)
+                    color = if (isDay) Color(0x99060414) else Color(0x99FFFFFF)
                 )
             }
         }
@@ -98,5 +98,6 @@ private fun PreviewTemperatureCard() {
         image = painterResource(R.drawable.clear_sky_image),
         temperature = 37f,
         time = "09:00",
+        isDay = false
     )
 }

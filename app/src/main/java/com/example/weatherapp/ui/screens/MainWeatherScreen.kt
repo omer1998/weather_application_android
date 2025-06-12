@@ -144,7 +144,8 @@ fun MainWeatherScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             painter = painterResource(R.drawable.location_icon),
-                            contentDescription = "location icon"
+                            contentDescription = "location icon",
+                            tint = if(currentWeather.isDay) Color.White else Color.White
                         )
                         Spacer(Modifier.width(4.dp))
                         Text(
@@ -153,6 +154,7 @@ fun MainWeatherScreen(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
                             letterSpacing = 0.25.sp,
+                            color = if(currentWeather.isDay) Color.White else Color.White
                         )
                     }
                 }
@@ -167,28 +169,31 @@ fun MainWeatherScreen(
                         when (it) {
                             true -> {
                                 Row(
-                                    Modifier.fillMaxWidth(),
+                                    Modifier.padding(horizontal = 12.dp).fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    SmallWeatherImageView(weatherCode = currentWeather.weatherCode) // getImageFromWeatherCode
+                                    SmallWeatherImageView(weatherCode = currentWeather.weatherCode, isDay = currentWeather.isDay, ) // getImageFromWeatherCode
                                     TemperatureView(
                                         currentTemp = currentWeather.currentTemperature,
                                         weatherStatus = getWeatherStatusFromCode(currentWeather.weatherCode), // getWeatherStatusFromCode()
                                         maxTemp = currentWeather.highTemperature,
-                                        minTemp = currentWeather.lowTemperature
+                                        minTemp = currentWeather.lowTemperature,
+                                        isDay = currentWeather.isDay
                                     )
                                 }
                             }
 
                             else -> {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    WeatherImageView()
+                                    WeatherImageView(weatherCode = currentWeather.weatherCode, isDay = currentWeather.isDay)
                                     TemperatureView(
                                         currentTemp = currentWeather.currentTemperature,
                                         weatherStatus = getWeatherStatusFromCode(currentWeather.weatherCode), // getWeatherStatusFromCode()
                                         maxTemp = currentWeather.highTemperature,
-                                        minTemp = currentWeather.lowTemperature
+                                        minTemp = currentWeather.lowTemperature,
+                                        isDay = currentWeather.isDay
+
                                     )
                                 }
 
@@ -216,6 +221,7 @@ fun MainWeatherScreen(
                                 icon = painterResource(R.drawable.wind_icon),
                                 title = "Wind",
                                 data = "${currentWeather.windSpeed} KM/h",
+                                isDay= currentWeather.isDay
                             )
                             WeatherInfoCard(
                                 modifier = Modifier.weight(1f),
@@ -223,12 +229,16 @@ fun MainWeatherScreen(
                                 icon = painterResource(R.drawable.humidity_icon),
                                 title = "Humidity",
                                 data = "${currentWeather.humidity} %",
+                                isDay= currentWeather.isDay
+
                             )
                             WeatherInfoCard(
                                 modifier = Modifier.weight(1f),
                                 icon = painterResource(R.drawable.rain_icon),
                                 title = "Rain",
                                 data = "${currentWeather.rain} %",
+                                isDay= currentWeather.isDay
+
                             )
                         }
                         Spacer(Modifier.height(6.dp))
@@ -238,18 +248,24 @@ fun MainWeatherScreen(
                                 icon = painterResource(R.drawable.uv_index_icon),
                                 title = "UV index",
                                 data = "${currentWeather.uvIndex}",
+                                isDay= currentWeather.isDay
+
                             )
                             WeatherInfoCard(
                                 modifier = Modifier.weight(1f),
                                 icon = painterResource(R.drawable.pressure_icon),
                                 title = "Pressure",
                                 data = "${currentWeather.pressure} hPa",
+                                isDay= currentWeather.isDay
+
                             )
                             WeatherInfoCard(
                                 modifier = Modifier.weight(1f),
                                 icon = painterResource(R.drawable.temperature_icon),
                                 title = "Feels like",
                                 data = "${currentWeather.currentTemperature}°C",
+                                isDay= currentWeather.isDay
+
                             )
                         }
                     }
@@ -257,7 +273,7 @@ fun MainWeatherScreen(
                 }
                 item {
                     Spacer(Modifier.height(24.dp))
-                    SectionTitle("Today", modifier = Modifier.padding(horizontal = 12.dp))
+                    SectionTitle("Today", modifier = Modifier.padding(horizontal = 12.dp), isDay= currentWeather.isDay)
                     Spacer(Modifier.height(12.dp))
                 }
                 item {
@@ -272,6 +288,8 @@ fun MainWeatherScreen(
                                 image = painterResource(getWeatherImageFromWeatherCode(it.weatherCode, currentWeather.isDay)),
                                 temperature = it.temperature,
                                 time = it.getTime(),
+                                isDay= it.isDay
+
                             )
                         }
                     }
@@ -279,25 +297,26 @@ fun MainWeatherScreen(
 
                 item {
                     Spacer(Modifier.height(24.dp))
-                    SectionTitle("Next 7 Days", modifier = Modifier.padding(horizontal = 12.dp))
+                    SectionTitle("Next 7 Days", modifier = Modifier.padding(horizontal = 12.dp), isDay = currentWeather.isDay)
                     Spacer(Modifier.height(12.dp))
                 }
                 item {
                     Box(
                         Modifier
                             .padding(start = 12.dp, end = 12.dp, bottom = 32.dp)
-                            .background(Color.White, RoundedCornerShape(24.dp))
+                            .background(Color.Transparent, RoundedCornerShape(24.dp))
                             .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
-                            .border(1.dp, color = Color(0x14060414)),
+                            //.border(1.dp, color = Color(0x14060414)),
 
                         ) {
-                        Column {
+                        Column(Modifier.background(Color.Transparent)) {
                             currentWeather.nextSeverDaysDetails.forEach {
                                 DayTemperatureInfo(
                                     day = it.dayName(),
                                     image = painterResource(getWeatherImageFromWeatherCode(it.weatherCode, currentWeather.isDay)),
                                     highTemp = it.maxTemp,
                                     lowTemp = it.minTemp,
+                                    isDay= currentWeather.isDay
 
                                     )
                             }

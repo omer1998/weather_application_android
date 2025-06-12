@@ -31,14 +31,19 @@ import com.example.weatherapp.ui.theme.Urbanist
 
 @Composable
 fun DayTemperatureInfo(
-    day: String, image: Painter, highTemp: Float, lowTemp: Float, modifier: Modifier = Modifier
+    day: String,
+    image: Painter,
+    highTemp: Float,
+    lowTemp: Float,
+    isDay: Boolean,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             //.padding(horizontal = 16.dp)
             .height(61.dp)
             .fillMaxWidth()
-            .background(Color(0x14060414))
+            .background(if (isDay) Color(0x14060414) else Color(0x14FFFFFF))
             .padding(bottom = 1.dp)
             .background(Color.White),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -49,17 +54,24 @@ fun DayTemperatureInfo(
             fontFamily = Urbanist,
             fontWeight = FontWeight(400),
             fontSize = 16.sp,
-            color = Color(0x99060414),
-            modifier = Modifier.weight(1f).padding(horizontal = 16.dp)
+            color = if (isDay) Color(0x99060414) else Color(0x99FFFFFF),
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 16.dp)
         )
         Image(
             image, null, modifier = Modifier
                 .size(32.dp)
                 .weight(1f)
         )
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = 16.dp).weight(1.1f)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .weight(1.1f)
+        ) {
             Icon(
-                tint = Color(0xDE060414),
+                tint = if (isDay) Color(0xDE060414) else Color(0xDEFFFFFF),
                 painter = painterResource(R.drawable.arrow_up_icon),
                 contentDescription = null
             )
@@ -71,13 +83,16 @@ fun DayTemperatureInfo(
                 letterSpacing = 0.25.sp,
                 lineHeight = 16.sp,
                 fontFamily = Urbanist,
-                color = Color(0xDE060414)
+                color = if (isDay) Color(0xDE060414) else Color(0xDEFFFFFF)
             )
             Spacer(Modifier.width(8.dp))
-            VerticalDivider(color = Color(0xDE060414), modifier = Modifier.height(14.dp))
+            VerticalDivider(
+                color = if (isDay) Color(0xDE060414) else Color(0xDEFFFFFF),
+                modifier = Modifier.height(14.dp)
+            )
             Spacer(Modifier.width(8.dp))
             Icon(
-                tint = Color(0xDE060414),
+                tint = if (isDay) Color(0xDE060414) else Color(0xDEFFFFFF),
                 painter = painterResource(R.drawable.arrow_down_icon),
                 contentDescription = null
             )
@@ -89,7 +104,7 @@ fun DayTemperatureInfo(
                 letterSpacing = 0.25.sp,
                 lineHeight = 16.sp,
                 fontFamily = Urbanist,
-                color = Color(0xDE060414)
+                color = if (isDay) Color(0xDE060414) else Color(0xDEFFFFFF)
             )
         }
     }
@@ -99,9 +114,11 @@ fun DayTemperatureInfo(
 @Composable
 private fun PreviewDayTemperatureInfo() {
     DayTemperatureInfo(
-        day = "Sunday", image = painterResource(R.drawable.clear_sky_image),
+        day = "Sunday",
+        image = painterResource(R.drawable.clear_sky_image),
         highTemp = 38f,
         lowTemp = 27f,
+        isDay = false
 
-        )
+    )
 }

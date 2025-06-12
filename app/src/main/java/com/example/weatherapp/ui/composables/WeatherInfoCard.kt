@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.example.weatherapp.R
 
 @Composable
-fun WeatherInfoCard(title: String, data: String, icon: Painter, modifier: Modifier = Modifier) {
+fun WeatherInfoCard(title: String, data: String, icon: Painter, isDay: Boolean, modifier: Modifier = Modifier) {
     Card(
         modifier
             //.width(108.dp)
@@ -43,14 +43,14 @@ fun WeatherInfoCard(title: String, data: String, icon: Painter, modifier: Modifi
                 //.widthIn(min = 108.dp)
                 .fillMaxWidth()
                 .height(115.dp)
-                .background(color = Color(0xB2FFFFFF))
+                .background(color =if(isDay) Color(0xB2FFFFFF) else Color(0xFF0D0C19)) // B2060414
                 .padding(16.dp)
             //    .fillMaxSize()
             ,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                painter = icon, null, modifier = Modifier.size(32.dp), tint = Color(0xFF87CEFA)
+                painter = icon, null, modifier = Modifier.size(32.dp), tint = if (isDay) Color(0xFF87CEFA) else Color(0xFF87CEFA)
             )
             Spacer(Modifier.height(8.dp))
             Text(
@@ -59,7 +59,7 @@ fun WeatherInfoCard(title: String, data: String, icon: Painter, modifier: Modifi
                 fontSize = 20.sp,
                 lineHeight = 20.sp,
                 letterSpacing = 0.25.sp,
-                color = Color(0xDE060414),
+                color = if (isDay) Color(0xDE060414) else Color(0xDEFFFFFF),
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(Modifier.height(2.dp))
@@ -69,7 +69,7 @@ fun WeatherInfoCard(title: String, data: String, icon: Painter, modifier: Modifi
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
                 letterSpacing = 0.25.sp,
-                color = Color(0x99060414)
+                color = if (isDay) Color(0x99060414) else Color(0x99FFFFFF)
             )
         }
     }
@@ -82,5 +82,6 @@ private fun PreviewWeatherInfoCard() {
         icon = painterResource(R.drawable.wind_icon),
         title = "Wind",
         data = "13 KM/h",
+        isDay = false
     )
 }

@@ -22,7 +22,7 @@ import com.example.weatherapp.R
 import com.example.weatherapp.utils.getWeatherImageFromWeatherCode
 
 @Composable
-fun WeatherImageView(modifier: Modifier = Modifier, size: Int = 200) {
+fun WeatherImageView(modifier: Modifier = Modifier, size: Int = 200, weatherCode:Int, isDay: Boolean) {
     Box(
         modifier = Modifier.size(size.dp), contentAlignment = Alignment.Center
     ) {
@@ -34,7 +34,7 @@ fun WeatherImageView(modifier: Modifier = Modifier, size: Int = 200) {
 
         )
         Image(
-            painter = painterResource(R.drawable.mainly_clear),
+            painter = painterResource(getWeatherImageFromWeatherCode(weatherCode, isDay = isDay)),
             contentDescription = "weather status picture",
             modifier = Modifier.fillMaxSize()
 
@@ -45,7 +45,7 @@ fun WeatherImageView(modifier: Modifier = Modifier, size: Int = 200) {
 }
 
 @Composable
-fun SmallWeatherImageView(modifier: Modifier = Modifier, size: Int = 120, weatherCode: Int) {
+fun SmallWeatherImageView(modifier: Modifier = Modifier, size: Int = 120, weatherCode: Int, isDay: Boolean) {
     Box(
         modifier = Modifier.size(size.dp), contentAlignment = Alignment.Center
     ) {
@@ -57,7 +57,7 @@ fun SmallWeatherImageView(modifier: Modifier = Modifier, size: Int = 120, weathe
 
         )
         Image(
-            painter = painterResource(getWeatherImageFromWeatherCode(weatherCode)),
+            painter = painterResource(getWeatherImageFromWeatherCode(weatherCode, isDay = isDay)),
             contentDescription = "weather status picture",
             modifier = Modifier.fillMaxSize()
 
@@ -66,8 +66,8 @@ fun SmallWeatherImageView(modifier: Modifier = Modifier, size: Int = 120, weathe
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, backgroundColor = 0x000000)
 @Composable
 private fun PreviewWeatherImageView() {
-    WeatherImageView()
+    WeatherImageView(weatherCode = 1, isDay = false)
 }

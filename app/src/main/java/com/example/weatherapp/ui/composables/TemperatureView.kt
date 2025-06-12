@@ -26,10 +26,14 @@ import com.example.weatherapp.R
 import com.example.weatherapp.ui.theme.Urbanist
 
 @Composable
-fun TemperatureView(currentTemp: Float, weatherStatus: String = "Partly Cloudy",
-                    maxTemp: Float,
-                    minTemp : Float,
-                    modifier: Modifier = Modifier) {
+fun TemperatureView(
+    currentTemp: Float,
+    weatherStatus: String = "Partly Cloudy",
+    maxTemp: Float,
+    minTemp: Float,
+    isDay: Boolean,
+    modifier: Modifier = Modifier
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxWidth()
     ) {
@@ -39,7 +43,8 @@ fun TemperatureView(currentTemp: Float, weatherStatus: String = "Partly Cloudy",
             fontWeight = FontWeight(600),
             fontSize = 64.sp,
             letterSpacing = 0.25.sp,
-            fontFamily = Urbanist
+            fontFamily = Urbanist,
+            color = if (isDay) Color.White else Color.White
         )
         Text(
             weatherStatus,
@@ -48,19 +53,23 @@ fun TemperatureView(currentTemp: Float, weatherStatus: String = "Partly Cloudy",
             letterSpacing = 0.25.sp,
             fontFamily = Urbanist,
             lineHeight = 16.sp,
-            color = Color(0x99060414)
+            color = if (isDay) Color(0x99060414) else Color(0x99FFFFFF)
         )
         Spacer(Modifier.height(12.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                 .background(
-                    Color(0x14060414), RoundedCornerShape(100.dp)
+                    if (isDay) Color(0x14060414) else Color(0x14FFFFFF), RoundedCornerShape(100.dp)
                 )
                 .padding(horizontal = 24.dp, vertical = 8.dp)
                 .wrapContentHeight()
 
         ) {
-            Icon(painter = painterResource(R.drawable.arrow_up_icon), contentDescription = null)
+            Icon(
+                tint = if (isDay) Color(0x99060414) else Color(0xDEFFFFFF),
+                painter = painterResource(R.drawable.arrow_up_icon),
+                contentDescription = null
+            )
             Spacer(Modifier.width(4.dp))
             Text(
                 "${maxTemp.toInt().toString()}°C",
@@ -69,12 +78,18 @@ fun TemperatureView(currentTemp: Float, weatherStatus: String = "Partly Cloudy",
                 letterSpacing = 0.25.sp,
                 lineHeight = 16.sp,
                 fontFamily = Urbanist,
-                color = Color(0x99060414)
+                color = if (isDay) Color(0x99060414) else Color(0xDEFFFFFF)
             )
             Spacer(Modifier.width(8.dp))
-            VerticalDivider(thickness = 1.dp, modifier = Modifier.height(14.dp), color = Color(0x3D060414))
+            VerticalDivider(
+                thickness = 1.dp, modifier = Modifier.height(14.dp), color = Color(0x3D060414)
+            )
             Spacer(Modifier.width(8.dp))
-            Icon(painter = painterResource(R.drawable.arrow_down_icon), contentDescription = null)
+            Icon(
+                tint = if (isDay) Color(0x99060414) else Color(0xDEFFFFFF),
+                painter = painterResource(R.drawable.arrow_down_icon),
+                contentDescription = null
+            )
             Spacer(Modifier.width(4.dp))
             Text(
                 "${minTemp.toInt().toString()}°C",
@@ -83,7 +98,7 @@ fun TemperatureView(currentTemp: Float, weatherStatus: String = "Partly Cloudy",
                 letterSpacing = 0.25.sp,
                 lineHeight = 16.sp,
                 fontFamily = Urbanist,
-                color = Color(0x99060414)
+                color = if (isDay) Color(0x99060414) else Color(0xDEFFFFFF)
             )
 
         }
@@ -96,9 +111,6 @@ fun TemperatureView(currentTemp: Float, weatherStatus: String = "Partly Cloudy",
 @Composable
 private fun PreviewMainTemperatureView() {
     TemperatureView(
-        currentTemp = 24f,
-
-        maxTemp = 40f,
-        minTemp = 30f,
+        currentTemp = 24f, maxTemp = 40f, minTemp = 30f, isDay = false
     )
 }
