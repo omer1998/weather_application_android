@@ -51,9 +51,9 @@ fun SmallWeatherImageView(modifier: Modifier = Modifier, size: Int = 120, weathe
     ) {
         Box(
             modifier
+                .background(Color(0x5900619D), shape = CircleShape)
                 .size(size.dp)
                 .blur(150.dp)
-                .background(Color(0x5900619D), shape = CircleShape)
 
         )
         Image(
@@ -66,8 +66,10 @@ fun SmallWeatherImageView(modifier: Modifier = Modifier, size: Int = 120, weathe
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0x000000)
+@Preview(showBackground = true,
+    //backgroundColor = 0x000000
+)
 @Composable
 private fun PreviewWeatherImageView() {
-    WeatherImageView(weatherCode = 1, isDay = false)
+    WeatherImageView(weatherCode = 1, isDay = true)
 }

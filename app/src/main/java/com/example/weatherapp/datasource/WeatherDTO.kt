@@ -28,7 +28,8 @@ fun WeatherDTO.toWeather(): Weather{
             TodayHourlyTemperatureStatus(
                 time = time,
                 temperature = hourly.temperature[index],
-                weatherCode = hourly.weatherCode[index]
+                weatherCode = hourly.weatherCode[index],
+                isDay = hourly.isDay[index] == 1
             )
         )
     }
@@ -54,7 +55,9 @@ data class Hourly(
     @SerialName("temperature_2m")
     val temperature: List<Float>,
     @SerialName("weather_code")
-    val weatherCode: List<Int>
+    val weatherCode: List<Int>,
+    @SerialName("is_day")
+    val isDay: List<Int>
 )
 
 @Serializable

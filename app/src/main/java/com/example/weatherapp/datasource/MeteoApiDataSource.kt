@@ -24,7 +24,8 @@ class MeteoApiDataSource : WeatherDataSource {
 
     override suspend fun getWeather(latitude: Double, longitude: Double): WeatherDTO {
         val url =
-            "https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max&hourly=,temperature_2m,weather_code&current=temperature_2m,relative_humidity_2m,rain,showers,snowfall,weather_code,pressure_msl,wind_speed_10m,is_day"
+            "https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max&hourly=temperature_2m,weather_code,is_day&current=temperature_2m,relative_humidity_2m,rain,showers,snowfall,weather_code,pressure_msl,wind_speed_10m,is_day"
+           // "https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max&hourly=,temperature_2m,weather_code&current=temperature_2m,relative_humidity_2m,rain,showers,snowfall,weather_code,pressure_msl,wind_speed_10m,is_day"
         val response = client.get(
             url
         )

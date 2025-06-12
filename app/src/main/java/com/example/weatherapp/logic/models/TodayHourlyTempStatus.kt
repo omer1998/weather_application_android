@@ -6,7 +6,8 @@ import java.time.format.DateTimeFormatter
 class TodayHourlyTemperatureStatus(
     val time: String,
     val temperature :Float,
-    val weatherCode: Int
+    val weatherCode: Int,
+    val isDay: Boolean
 )
 
 fun TodayHourlyTemperatureStatus.getTime():String{

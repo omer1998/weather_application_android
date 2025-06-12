@@ -285,10 +285,10 @@ fun MainWeatherScreen(
                             items = currentWeather.todayHourlyTemperature,
                             key = { it.time }) { it ->
                             TemperatureInfoCard(
-                                image = painterResource(getWeatherImageFromWeatherCode(it.weatherCode, currentWeather.isDay)),
+                                image = painterResource(getWeatherImageFromWeatherCode(it.weatherCode, it.isDay)),
                                 temperature = it.temperature,
                                 time = it.getTime(),
-                                isDay= it.isDay
+                                isDay= currentWeather.isDay
 
                             )
                         }
