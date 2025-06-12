@@ -44,7 +44,7 @@ fun TemperatureView(
             fontSize = 64.sp,
             letterSpacing = 0.25.sp,
             fontFamily = Urbanist,
-            color = if (isDay) Color.White else Color.White
+            color = if (isDay) Color(0xFF060414) else Color.White
         )
         Text(
             weatherStatus,

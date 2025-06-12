@@ -145,7 +145,7 @@ fun MainWeatherScreen(
                         Icon(
                             painter = painterResource(R.drawable.location_icon),
                             contentDescription = "location icon",
-                            tint = if(currentWeather.isDay) Color.White else Color.White
+                            tint = if(currentWeather.isDay) Color(0xFF323232) else Color.White
                         )
                         Spacer(Modifier.width(4.dp))
                         Text(
@@ -154,7 +154,7 @@ fun MainWeatherScreen(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
                             letterSpacing = 0.25.sp,
-                            color = if(currentWeather.isDay) Color.White else Color.White
+                            color = if(currentWeather.isDay) Color(0xFF323232) else Color.White
                         )
                     }
                 }
