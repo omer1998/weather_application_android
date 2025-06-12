@@ -5,8 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -14,8 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.example.weatherapp.R
 
 @Composable
-fun TemperatureInfoCard(
+fun HourlyTemperatureCard(
     image: Painter, temperature: Float, time: String, isDay: Boolean, modifier: Modifier = Modifier
 ) {
     Box(
@@ -94,7 +90,7 @@ fun TemperatureInfoCard(
 )
 @Composable
 private fun PreviewTemperatureCard() {
-    TemperatureInfoCard(
+    HourlyTemperatureCard(
         image = painterResource(R.drawable.clear_sky_image),
         temperature = 37f,
         time = "09:00",

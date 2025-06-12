@@ -28,12 +28,13 @@ import com.example.weatherapp.ui.theme.Urbanist
 @Composable
 fun TemperatureView(
     currentTemp: Float,
-    weatherStatus: String = "Partly Cloudy",
     maxTemp: Float,
     minTemp: Float,
     isDay: Boolean,
-    modifier: Modifier = Modifier
-) {
+    modifier: Modifier = Modifier,
+    weatherStatus: String = "Partly Cloudy",
+
+    ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxWidth()
     ) {

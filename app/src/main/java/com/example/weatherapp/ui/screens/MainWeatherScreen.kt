@@ -46,11 +46,11 @@ import com.example.weatherapp.logic.models.getTime
 import com.example.weatherapp.ui.composables.DayTemperatureInfo
 import com.example.weatherapp.ui.composables.SectionTitle
 import com.example.weatherapp.ui.composables.SmallWeatherImageView
-import com.example.weatherapp.ui.composables.TemperatureInfoCard
+import com.example.weatherapp.ui.composables.HourlyTemperatureCard
 import com.example.weatherapp.ui.composables.TemperatureView
 import com.example.weatherapp.ui.composables.WeatherImageView
 import com.example.weatherapp.ui.composables.WeatherInfoCard
-import com.example.weatherapp.ui.ui_models.WeatherUiState
+import com.example.weatherapp.ui.ui_states.WeatherUiState
 import com.example.weatherapp.ui.viewmodel.MainWeatherScreenViewModel
 import com.example.weatherapp.utils.getWeatherImageFromWeatherCode
 import com.example.weatherapp.utils.getWeatherStatusFromCode
@@ -87,7 +87,7 @@ fun MainWeatherScreen(
             }
         }
 
-        is WeatherUiState.Intitial -> {
+        is WeatherUiState.Initial -> {
 
         }
 
@@ -272,7 +272,7 @@ fun MainWeatherScreen(
                         items(
                             items = currentWeather.todayHourlyTemperature,
                             key = { it.date }) { it ->
-                            TemperatureInfoCard(
+                            HourlyTemperatureCard(
                                 image = painterResource(
                                     getWeatherImageFromWeatherCode(
                                         it.weatherCode, it.isDay
@@ -302,7 +302,6 @@ fun MainWeatherScreen(
                             .padding(start = 12.dp, end = 12.dp, bottom = 32.dp)
                             .background(Color.Transparent, RoundedCornerShape(24.dp))
                             .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
-                        //.border(1.dp, color = Color(0x14060414)),
 
                     ) {
                         Column(Modifier.background(Color.Transparent)) {

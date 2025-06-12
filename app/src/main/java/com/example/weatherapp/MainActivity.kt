@@ -21,7 +21,6 @@ import com.example.weatherapp.di.appModule
 import com.example.weatherapp.logic.location.UserLocation
 import com.example.weatherapp.ui.screens.MainWeatherScreen
 import com.example.weatherapp.ui.theme.WeatherAppTheme
-import com.example.weatherapp.ui.ui_models.LocationViewModel
 import com.example.weatherapp.ui.viewmodel.MainWeatherScreenViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState

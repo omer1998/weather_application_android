@@ -9,7 +9,6 @@ import com.example.weatherapp.logic.location.UserLocationInterface
 import com.example.weatherapp.logic.repository.IWeatherRepository
 import com.example.weatherapp.logic.weather.WeatherLogicImpl
 import com.example.weatherapp.logic.weather.WeatherLogicInterface
-import com.example.weatherapp.ui.ui_models.LocationViewModel
 import com.example.weatherapp.ui.viewmodel.MainWeatherScreenViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
