@@ -1,7 +1,7 @@
 package com.example.weatherapp.di
 
-import com.example.weatherapp.datasource.MeteoApiDataSource
-import com.example.weatherapp.datasource.WeatherDataSource
+import com.example.weatherapp.data.datasource.MeteoApiDataSource
+import com.example.weatherapp.data.datasource.WeatherDataSource
 import com.example.weatherapp.logic.location.UserLocation
 import com.example.weatherapp.logic.location.UserLocationInterface
 import com.example.weatherapp.logic.weather.WeatherLogicImpl

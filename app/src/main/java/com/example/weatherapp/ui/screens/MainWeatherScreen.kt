@@ -1,13 +1,9 @@
 package com.example.weatherapp.ui.screens
 
-import android.Manifest
 import android.util.Log
-import androidx.annotation.RequiresPermission
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,33 +14,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridScope
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,10 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.widget.ContentLoadingProgressBar
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weatherapp.R
-import com.example.weatherapp.datasource.MeteoApiDataSource
 import com.example.weatherapp.logic.models.dayName
 import com.example.weatherapp.logic.models.getTime
 import com.example.weatherapp.ui.composables.DayTemperatureInfo
@@ -69,17 +50,10 @@ import com.example.weatherapp.ui.composables.TemperatureInfoCard
 import com.example.weatherapp.ui.composables.TemperatureView
 import com.example.weatherapp.ui.composables.WeatherImageView
 import com.example.weatherapp.ui.composables.WeatherInfoCard
-import com.example.weatherapp.ui.ui_models.LocationViewModel
 import com.example.weatherapp.ui.ui_models.WeatherUiState
 import com.example.weatherapp.ui.viewmodel.MainWeatherScreenViewModel
 import com.example.weatherapp.utils.getWeatherImageFromWeatherCode
 import com.example.weatherapp.utils.getWeatherStatusFromCode
-import com.google.android.gms.location.LocationServices
-import io.ktor.http.ContentType
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 @Composable
 fun MainWeatherScreen(
@@ -128,24 +102,26 @@ fun MainWeatherScreen(
                 state = scrollState,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier
-                    .fillMaxSize()
+
                     .background(
                         brush = Brush.linearGradient(
-                            colors = if(currentWeather.isDay) listOf(
+                            colors = if (currentWeather.isDay) listOf(
                                 Color(0xFF87CEFA), Color(0xFFFFFFFF)
                             ) else listOf(Color(0xFF060414), Color(0xFF0D0C19))
                         ),
                     )
+                    .statusBarsPadding()
+                    .fillMaxSize()
 
             ) {
 
                 item {
-                    Spacer(Modifier.height(32.dp))
+                    Spacer(Modifier.height(24.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             painter = painterResource(R.drawable.location_icon),
                             contentDescription = "location icon",
-                            tint = if(currentWeather.isDay) Color(0xFF323232) else Color.White
+                            tint = if (currentWeather.isDay) Color(0xFF323232) else Color.White
                         )
                         Spacer(Modifier.width(4.dp))
                         Text(
@@ -154,7 +130,7 @@ fun MainWeatherScreen(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
                             letterSpacing = 0.25.sp,
-                            color = if(currentWeather.isDay) Color(0xFF323232) else Color.White
+                            color = if (currentWeather.isDay) Color(0xFF323232) else Color.White
                         )
                     }
                 }
@@ -169,11 +145,16 @@ fun MainWeatherScreen(
                         when (it) {
                             true -> {
                                 Row(
-                                    Modifier.padding(horizontal = 12.dp).fillMaxWidth(),
+                                    Modifier
+                                        .padding(horizontal = 12.dp)
+                                        .fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    SmallWeatherImageView(weatherCode = currentWeather.weatherCode, isDay = currentWeather.isDay, ) // getImageFromWeatherCode
+                                    SmallWeatherImageView(
+                                        weatherCode = currentWeather.weatherCode,
+                                        isDay = currentWeather.isDay,
+                                    ) // getImageFromWeatherCode
                                     TemperatureView(
                                         currentTemp = currentWeather.currentTemperature,
                                         weatherStatus = getWeatherStatusFromCode(currentWeather.weatherCode), // getWeatherStatusFromCode()
@@ -186,7 +167,10 @@ fun MainWeatherScreen(
 
                             else -> {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    WeatherImageView(weatherCode = currentWeather.weatherCode, isDay = currentWeather.isDay)
+                                    WeatherImageView(
+                                        weatherCode = currentWeather.weatherCode,
+                                        isDay = currentWeather.isDay
+                                    )
                                     TemperatureView(
                                         currentTemp = currentWeather.currentTemperature,
                                         weatherStatus = getWeatherStatusFromCode(currentWeather.weatherCode), // getWeatherStatusFromCode()
@@ -221,7 +205,7 @@ fun MainWeatherScreen(
                                 icon = painterResource(R.drawable.wind_icon),
                                 title = "Wind",
                                 data = "${currentWeather.windSpeed} KM/h",
-                                isDay= currentWeather.isDay
+                                isDay = currentWeather.isDay
                             )
                             WeatherInfoCard(
                                 modifier = Modifier.weight(1f),
@@ -229,7 +213,7 @@ fun MainWeatherScreen(
                                 icon = painterResource(R.drawable.humidity_icon),
                                 title = "Humidity",
                                 data = "${currentWeather.humidity} %",
-                                isDay= currentWeather.isDay
+                                isDay = currentWeather.isDay
 
                             )
                             WeatherInfoCard(
@@ -237,7 +221,7 @@ fun MainWeatherScreen(
                                 icon = painterResource(R.drawable.rain_icon),
                                 title = "Rain",
                                 data = "${currentWeather.rain} %",
-                                isDay= currentWeather.isDay
+                                isDay = currentWeather.isDay
 
                             )
                         }
@@ -248,7 +232,7 @@ fun MainWeatherScreen(
                                 icon = painterResource(R.drawable.uv_index_icon),
                                 title = "UV index",
                                 data = "${currentWeather.uvIndex}",
-                                isDay= currentWeather.isDay
+                                isDay = currentWeather.isDay
 
                             )
                             WeatherInfoCard(
@@ -256,7 +240,7 @@ fun MainWeatherScreen(
                                 icon = painterResource(R.drawable.pressure_icon),
                                 title = "Pressure",
                                 data = "${currentWeather.pressure} hPa",
-                                isDay= currentWeather.isDay
+                                isDay = currentWeather.isDay
 
                             )
                             WeatherInfoCard(
@@ -264,7 +248,7 @@ fun MainWeatherScreen(
                                 icon = painterResource(R.drawable.temperature_icon),
                                 title = "Feels like",
                                 data = "${currentWeather.currentTemperature}°C",
-                                isDay= currentWeather.isDay
+                                isDay = currentWeather.isDay
 
                             )
                         }
@@ -273,7 +257,11 @@ fun MainWeatherScreen(
                 }
                 item {
                     Spacer(Modifier.height(24.dp))
-                    SectionTitle("Today", modifier = Modifier.padding(horizontal = 12.dp), isDay= currentWeather.isDay)
+                    SectionTitle(
+                        "Today",
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        isDay = currentWeather.isDay
+                    )
                     Spacer(Modifier.height(12.dp))
                 }
                 item {
@@ -283,12 +271,16 @@ fun MainWeatherScreen(
                     ) {
                         items(
                             items = currentWeather.todayHourlyTemperature,
-                            key = { it.time }) { it ->
+                            key = { it.date }) { it ->
                             TemperatureInfoCard(
-                                image = painterResource(getWeatherImageFromWeatherCode(it.weatherCode, it.isDay)),
+                                image = painterResource(
+                                    getWeatherImageFromWeatherCode(
+                                        it.weatherCode, it.isDay
+                                    )
+                                ),
                                 temperature = it.temperature,
                                 time = it.getTime(),
-                                isDay= currentWeather.isDay
+                                isDay = currentWeather.isDay
 
                             )
                         }
@@ -297,7 +289,11 @@ fun MainWeatherScreen(
 
                 item {
                     Spacer(Modifier.height(24.dp))
-                    SectionTitle("Next 7 Days", modifier = Modifier.padding(horizontal = 12.dp), isDay = currentWeather.isDay)
+                    SectionTitle(
+                        "Next 7 Days",
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        isDay = currentWeather.isDay
+                    )
                     Spacer(Modifier.height(12.dp))
                 }
                 item {
@@ -306,19 +302,23 @@ fun MainWeatherScreen(
                             .padding(start = 12.dp, end = 12.dp, bottom = 32.dp)
                             .background(Color.Transparent, RoundedCornerShape(24.dp))
                             .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
-                            //.border(1.dp, color = Color(0x14060414)),
+                        //.border(1.dp, color = Color(0x14060414)),
 
-                        ) {
+                    ) {
                         Column(Modifier.background(Color.Transparent)) {
                             currentWeather.nextSeverDaysDetails.forEach {
                                 DayTemperatureInfo(
                                     day = it.dayName(),
-                                    image = painterResource(getWeatherImageFromWeatherCode(it.weatherCode, currentWeather.isDay)),
+                                    image = painterResource(
+                                        getWeatherImageFromWeatherCode(
+                                            it.weatherCode, currentWeather.isDay
+                                        )
+                                    ),
                                     highTemp = it.maxTemp,
                                     lowTemp = it.minTemp,
-                                    isDay= currentWeather.isDay
+                                    isDay = currentWeather.isDay
 
-                                    )
+                                )
                             }
 //
                         }

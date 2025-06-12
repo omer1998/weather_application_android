@@ -67,5 +67,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
     implementation ("com.google.accompanist:accompanist-permissions:0.37.3")
+    // implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2") // this for kotlinx datetime; ideal for KMP app
 
 }

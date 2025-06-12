@@ -1,7 +1,7 @@
 package com.example.weatherapp.logic.weather
 
-import com.example.weatherapp.datasource.WeatherDataSource
-import com.example.weatherapp.datasource.toWeather
+import com.example.weatherapp.data.datasource.WeatherDataSource
+import com.example.weatherapp.data.datasource.toWeather
 import com.example.weatherapp.logic.models.Weather
 
 class WeatherLogicImpl(val weatherDatasource: WeatherDataSource): WeatherLogicInterface {
