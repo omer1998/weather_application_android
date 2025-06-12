@@ -44,7 +44,6 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         val weatherScreenViewModel: MainWeatherScreenViewModel by viewModel()
-        // val locationViewModel: LocationViewModel by viewModel()
 
         enableEdgeToEdge()
         setContent {
@@ -69,9 +68,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-
-
-            // MainWeatherScreen()
         }
     }
 }
