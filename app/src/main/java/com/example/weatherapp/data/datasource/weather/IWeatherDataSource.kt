@@ -1,5 +1,5 @@
-package com.example.weatherapp.data.datasource
+package com.example.weatherapp.data.datasource.weather
 
-interface WeatherDataSource {
+interface IWeatherDataSource {
     suspend fun getWeather(latitude:Double, longitude:Double) : WeatherDTO
 }

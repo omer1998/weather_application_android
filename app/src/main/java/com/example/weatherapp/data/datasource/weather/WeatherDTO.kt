@@ -1,4 +1,4 @@
-package com.example.weatherapp.data.datasource
+package com.example.weatherapp.data.datasource.weather
 
 import com.example.weatherapp.logic.models.DayTemperatureStatus
 import com.example.weatherapp.logic.models.TodayHourlyTemperatureStatus

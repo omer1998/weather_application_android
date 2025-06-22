@@ -1,4 +1,4 @@
-package com.example.weatherapp.data.datasource
+package com.example.weatherapp.data.datasource.weather
 
 import io.ktor.client.*
 import io.ktor.client.call.body
@@ -8,7 +8,7 @@ import io.ktor.client.request.get
 import kotlinx.serialization.json.Json
 
 
-class MeteoApiDataSource : WeatherDataSource {
+class MeteoApiDataSourceI : IWeatherDataSource {
 
     val client = HttpClient(CIO) {
         install(ContentNegotiation)
