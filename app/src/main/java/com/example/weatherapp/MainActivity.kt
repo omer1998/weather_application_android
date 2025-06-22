@@ -38,7 +38,6 @@ class MainActivity : ComponentActivity() {
 
 
     @OptIn(ExperimentalPermissionsApi::class)
-    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
@@ -47,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            WeatherAppTheme{
+            WeatherAppTheme {
                 val permissionState = rememberMultiplePermissionsState(
                     listOf(
                         android.Manifest.permission.ACCESS_FINE_LOCATION,
@@ -57,32 +56,17 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(Unit) {
                     permissionState.launchMultiplePermissionRequest()
                 }
-                if (permissionState.allPermissionsGranted){
+                if (permissionState.allPermissionsGranted) {
                     MainWeatherScreen(
                         weatherScreenViewModel = weatherScreenViewModel,
                         //    locationViewModel = locationViewModel
                     )
-                }else{
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                } else {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text("permission is not granted")
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!", modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    WeatherAppTheme {
-        Greeting("Android")
     }
 }
