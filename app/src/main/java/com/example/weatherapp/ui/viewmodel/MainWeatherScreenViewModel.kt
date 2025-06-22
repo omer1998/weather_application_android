@@ -4,12 +4,13 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weatherapp.data.datasource.AppException
 import com.example.weatherapp.logic.location.UserLocationInterface
 import com.example.weatherapp.logic.weather.WeatherLogicInterface
 import com.example.weatherapp.ui.ui_states.WeatherUiState
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainWeatherScreenViewModel(
@@ -20,49 +21,37 @@ class MainWeatherScreenViewModel(
 
     fun getWeather(context: Context) {
         viewModelScope.launch {
-            _state.value = WeatherUiState.Loading
-            val locationResult = userLocation.getCurrentUserLocation(context)
-            locationResult.fold(onSuccess = { location ->
-                if (location != null) {
-                    val cityNameDeffered = async {
-                        userLocation.getCityName(
-                            context = context,
-                            latitude = location.latitude,
-                            longitude = location.longitude,
+             try {
+                 _state.value = WeatherUiState.Loading
 
-                            )
-                    }
-                    cityNameDeffered.await().fold(onSuccess = { cityName ->
-                        val result = weatherLogicInterface.getWeather(
-                            latitude = location.latitude, longitude = location.longitude
-                        )
+                 val location =userLocation.getCurrentUserLocation(context)
+                 val cityName = userLocation.getCityName(
+                     longitude = location.longitude,
+                     latitude = location.latitude,
+                     context = context
+                 )
+                 val weather = weatherLogicInterface.getWeather(latitude = location.latitude, longitude = location.longitude)
+                 Log.i("weather", "${weather}")
+                 println(weather)
+                 _state.update { WeatherUiState.Success(
+                     weatherData = weather,
+                     location = location,
+                     cityName = cityName
+                 ) }
 
-                        result.fold(onFailure = { t ->
-                            println("===> failure ${t.message}")
-                            _state.value = WeatherUiState.Failure(t.message.toString())
+            }catch (e: AppException){
+//                when(e){
+//                    AppException.CanNotGetLocationException -> TODO()
+//                    AppException.CityNameException -> TODO()
+//                    AppException.LocationPermissionNotGranted -> TODO()
+//                }
+                _state.update { WeatherUiState.Failure(e.toString()) }
+            }
 
-                        }, onSuccess = { weatherData ->
-                            println("===> Success ${weatherData.toString()}")
 
-                            _state.value = WeatherUiState.Success(weatherData, location, cityName)
-                        })
-                    }, onFailure = {
-                        _state.value = WeatherUiState.Failure(it.message.toString())
-
-                    })
-
-                } else {
-                    _state.value = WeatherUiState.Failure("Location not available")
-
-                }
-
-            }, onFailure = {
-                _state.value = WeatherUiState.Failure(it.message.toString())
-
-            })
-
+            }
 
         }
     }
 
-}
+
