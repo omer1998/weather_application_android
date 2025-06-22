@@ -1,8 +1,6 @@
 package com.example.weatherapp.ui.screens
 
 import android.util.Log
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,19 +14,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,16 +39,13 @@ import com.example.weatherapp.R
 import com.example.weatherapp.logic.models.dayName
 import com.example.weatherapp.logic.models.getTime
 import com.example.weatherapp.ui.composables.DayTemperatureInfo
-import com.example.weatherapp.ui.composables.SectionTitle
-import com.example.weatherapp.ui.composables.SmallWeatherImageView
 import com.example.weatherapp.ui.composables.HourlyTemperatureCard
-import com.example.weatherapp.ui.composables.TemperatureView
-import com.example.weatherapp.ui.composables.WeatherImageView
+import com.example.weatherapp.ui.composables.SectionTitle
 import com.example.weatherapp.ui.composables.WeatherInfoCard
+import com.example.weatherapp.ui.composables.WeatherSummary
 import com.example.weatherapp.ui.ui_states.WeatherUiState
 import com.example.weatherapp.ui.viewmodel.MainWeatherScreenViewModel
 import com.example.weatherapp.utils.getWeatherImageFromWeatherCode
-import com.example.weatherapp.utils.getWeatherStatusFromCode
 
 @Composable
 fun MainWeatherScreen(
@@ -71,13 +63,8 @@ fun MainWeatherScreen(
 
     Log.i("state", "state now is $state")
 
-    val scrollState = rememberLazyListState()
-    val showHeaderSideBySide by remember {
-        derivedStateOf { scrollState.firstVisibleItemIndex > 0 }
-    }
+    val scrollState = rememberScrollState()
 
-
-    val imageSize by animateIntAsState(if (showHeaderSideBySide) 120 else 200)
 
     val currentStateValue = state.value
     when (currentStateValue) {
@@ -98,8 +85,8 @@ fun MainWeatherScreen(
 
         is WeatherUiState.Success -> {
             val currentWeather = currentStateValue.weatherData
-            LazyColumn(
-                state = scrollState,
+            Column(
+
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier
 
@@ -112,215 +99,167 @@ fun MainWeatherScreen(
                     )
                     .statusBarsPadding()
                     .fillMaxSize()
+                    .verticalScroll(scrollState)
 
             ) {
 
-                item {
-                    Spacer(Modifier.height(24.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            painter = painterResource(R.drawable.location_icon),
-                            contentDescription = "location icon",
-                            tint = if (currentWeather.isDay) Color(0xFF323232) else Color.White
-                        )
-                        Spacer(Modifier.width(4.dp))
-                        Text(
-                            currentStateValue.cityName,
-                            fontWeight = FontWeight(500),
-                            fontSize = 16.sp,
-                            lineHeight = 20.sp,
-                            letterSpacing = 0.25.sp,
-                            color = if (currentWeather.isDay) Color(0xFF323232) else Color.White
-                        )
-                    }
-                }
-                item {
-                    Spacer(Modifier.height(24.dp))
 
-                }
-                item {
-//
-
-                    Crossfade(showHeaderSideBySide) {
-                        when (it) {
-                            true -> {
-                                Row(
-                                    Modifier
-                                        .padding(horizontal = 12.dp)
-                                        .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    SmallWeatherImageView(
-                                        weatherCode = currentWeather.weatherCode,
-                                        isDay = currentWeather.isDay,
-                                    ) // getImageFromWeatherCode
-                                    TemperatureView(
-                                        currentTemp = currentWeather.currentTemperature,
-                                        weatherStatus = getWeatherStatusFromCode(currentWeather.weatherCode), // getWeatherStatusFromCode()
-                                        maxTemp = currentWeather.highTemperature,
-                                        minTemp = currentWeather.lowTemperature,
-                                        isDay = currentWeather.isDay
-                                    )
-                                }
-                            }
-
-                            else -> {
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    WeatherImageView(
-                                        weatherCode = currentWeather.weatherCode,
-                                        isDay = currentWeather.isDay
-                                    )
-                                    TemperatureView(
-                                        currentTemp = currentWeather.currentTemperature,
-                                        weatherStatus = getWeatherStatusFromCode(currentWeather.weatherCode), // getWeatherStatusFromCode()
-                                        maxTemp = currentWeather.highTemperature,
-                                        minTemp = currentWeather.lowTemperature,
-                                        isDay = currentWeather.isDay
-
-                                    )
-                                }
-
-                            }
-                        }
-                    }
-                }
-
-
-                item {
-                    Spacer(Modifier.height(24.dp))
-                }
-                item {
-                    Column(
-                        Modifier
-                            .padding(horizontal = 12.dp)
-                            .fillMaxWidth()
-                    ) {
-
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            WeatherInfoCard(
-                                modifier = Modifier.weight(1f),
-                                icon = painterResource(R.drawable.wind_icon),
-                                title = "Wind",
-                                data = "${currentWeather.windSpeed} KM/h",
-                                isDay = currentWeather.isDay
-                            )
-                            WeatherInfoCard(
-                                modifier = Modifier.weight(1f),
-
-                                icon = painterResource(R.drawable.humidity_icon),
-                                title = "Humidity",
-                                data = "${currentWeather.humidity} %",
-                                isDay = currentWeather.isDay
-
-                            )
-                            WeatherInfoCard(
-                                modifier = Modifier.weight(1f),
-                                icon = painterResource(R.drawable.rain_icon),
-                                title = "Rain",
-                                data = "${currentWeather.rain} %",
-                                isDay = currentWeather.isDay
-
-                            )
-                        }
-                        Spacer(Modifier.height(6.dp))
-                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            WeatherInfoCard(
-                                modifier = Modifier.weight(1f),
-                                icon = painterResource(R.drawable.uv_index_icon),
-                                title = "UV index",
-                                data = "${currentWeather.uvIndex}",
-                                isDay = currentWeather.isDay
-
-                            )
-                            WeatherInfoCard(
-                                modifier = Modifier.weight(1f),
-                                icon = painterResource(R.drawable.pressure_icon),
-                                title = "Pressure",
-                                data = "${currentWeather.pressure} hPa",
-                                isDay = currentWeather.isDay
-
-                            )
-                            WeatherInfoCard(
-                                modifier = Modifier.weight(1f),
-                                icon = painterResource(R.drawable.temperature_icon),
-                                title = "Feels like",
-                                data = "${currentWeather.currentTemperature}°C",
-                                isDay = currentWeather.isDay
-
-                            )
-                        }
-                    }
-
-                }
-                item {
-                    Spacer(Modifier.height(24.dp))
-                    SectionTitle(
-                        "Today",
-                        modifier = Modifier.padding(horizontal = 12.dp),
-                        isDay = currentWeather.isDay
+                Spacer(Modifier.height(24.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painter = painterResource(R.drawable.location_icon),
+                        contentDescription = "location icon",
+                        tint = if (currentWeather.isDay) Color(0xFF323232) else Color.White
                     )
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        currentStateValue.cityName,
+                        fontWeight = FontWeight(500),
+                        fontSize = 16.sp,
+                        lineHeight = 20.sp,
+                        letterSpacing = 0.25.sp,
+                        color = if (currentWeather.isDay) Color(0xFF323232) else Color.White
+                    )
                 }
-                item {
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = 12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+
+                Spacer(Modifier.height(24.dp))
+
+               WeatherSummary(scrollState, currentWeather)
+
+
+
+                Spacer(Modifier.height(24.dp))
+
+
+                Column(
+                    Modifier
+                        .padding(horizontal = 12.dp)
+                        .fillMaxWidth()
+                ) {
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        items(
-                            items = currentWeather.todayHourlyTemperature,
-                            key = { it.date }) { it ->
-                            HourlyTemperatureCard(
+                        WeatherInfoCard(
+                            modifier = Modifier.weight(1f),
+                            icon = painterResource(R.drawable.wind_icon),
+                            title = "Wind",
+                            data = "${currentWeather.windSpeed} KM/h",
+                            isDay = currentWeather.isDay
+                        )
+                        WeatherInfoCard(
+                            modifier = Modifier.weight(1f),
+
+                            icon = painterResource(R.drawable.humidity_icon),
+                            title = "Humidity",
+                            data = "${currentWeather.humidity} %",
+                            isDay = currentWeather.isDay
+
+                        )
+                        WeatherInfoCard(
+                            modifier = Modifier.weight(1f),
+                            icon = painterResource(R.drawable.rain_icon),
+                            title = "Rain",
+                            data = "${currentWeather.rain} %",
+                            isDay = currentWeather.isDay
+
+                        )
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        WeatherInfoCard(
+                            modifier = Modifier.weight(1f),
+                            icon = painterResource(R.drawable.uv_index_icon),
+                            title = "UV index",
+                            data = "${currentWeather.uvIndex}",
+                            isDay = currentWeather.isDay
+
+                        )
+                        WeatherInfoCard(
+                            modifier = Modifier.weight(1f),
+                            icon = painterResource(R.drawable.pressure_icon),
+                            title = "Pressure",
+                            data = "${currentWeather.pressure} hPa",
+                            isDay = currentWeather.isDay
+
+                        )
+                        WeatherInfoCard(
+                            modifier = Modifier.weight(1f),
+                            icon = painterResource(R.drawable.temperature_icon),
+                            title = "Feels like",
+                            data = "${currentWeather.currentTemperature}°C",
+                            isDay = currentWeather.isDay
+
+                        )
+                    }
+                }
+
+
+
+                Spacer(Modifier.height(24.dp))
+                SectionTitle(
+                    "Today",
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    isDay = currentWeather.isDay
+                )
+                Spacer(Modifier.height(12.dp))
+
+
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(
+                        items = currentWeather.todayHourlyTemperature,
+                        key = { it.date }) { it ->
+                        HourlyTemperatureCard(
+                            image = painterResource(
+                                getWeatherImageFromWeatherCode(
+                                    it.weatherCode, it.isDay
+                                )
+                            ),
+                            temperature = it.temperature,
+                            time = it.getTime(),
+                            isDay = currentWeather.isDay
+
+                        )
+                    }
+                }
+
+
+
+                Spacer(Modifier.height(24.dp))
+                SectionTitle(
+                    "Next 7 Days",
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    isDay = currentWeather.isDay
+                )
+                Spacer(Modifier.height(12.dp))
+
+                Box(
+                    Modifier
+                        .padding(start = 12.dp, end = 12.dp, bottom = 32.dp)
+                        .background(Color.Transparent, RoundedCornerShape(24.dp))
+                        .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+
+                ) {
+                    Column(Modifier.background(Color.Transparent)) {
+                        currentWeather.nextSeverDaysDetails.forEach {
+                            DayTemperatureInfo(
+                                day = it.dayName(),
                                 image = painterResource(
                                     getWeatherImageFromWeatherCode(
-                                        it.weatherCode, it.isDay
+                                        it.weatherCode, currentWeather.isDay
                                     )
                                 ),
-                                temperature = it.temperature,
-                                time = it.getTime(),
+                                highTemp = it.maxTemp,
+                                lowTemp = it.minTemp,
                                 isDay = currentWeather.isDay
 
                             )
                         }
-                    }
-                }
-
-                item {
-                    Spacer(Modifier.height(24.dp))
-                    SectionTitle(
-                        "Next 7 Days",
-                        modifier = Modifier.padding(horizontal = 12.dp),
-                        isDay = currentWeather.isDay
-                    )
-                    Spacer(Modifier.height(12.dp))
-                }
-                item {
-                    Box(
-                        Modifier
-                            .padding(start = 12.dp, end = 12.dp, bottom = 32.dp)
-                            .background(Color.Transparent, RoundedCornerShape(24.dp))
-                            .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
-
-                    ) {
-                        Column(Modifier.background(Color.Transparent)) {
-                            currentWeather.nextSeverDaysDetails.forEach {
-                                DayTemperatureInfo(
-                                    day = it.dayName(),
-                                    image = painterResource(
-                                        getWeatherImageFromWeatherCode(
-                                            it.weatherCode, currentWeather.isDay
-                                        )
-                                    ),
-                                    highTemp = it.maxTemp,
-                                    lowTemp = it.minTemp,
-                                    isDay = currentWeather.isDay
-
-                                )
-                            }
 //
-                        }
+
 
                     }
                 }
@@ -330,8 +269,8 @@ fun MainWeatherScreen(
         }
 
     }
-
 }
+
 
 @Preview
 @Composable

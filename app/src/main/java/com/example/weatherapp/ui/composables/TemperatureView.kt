@@ -34,9 +34,10 @@ fun TemperatureView(
     modifier: Modifier = Modifier,
     weatherStatus: String = "Partly Cloudy",
 
+
     ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxWidth()
+        horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier
     ) {
 
         Text(

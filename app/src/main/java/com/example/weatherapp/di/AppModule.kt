@@ -42,7 +42,4 @@ val appModule: Module = module {
     viewModel {
         MainWeatherScreenViewModel(get(), get())
     }
-    viewModel {
-        LocationViewModel(get())
-    }
 }
